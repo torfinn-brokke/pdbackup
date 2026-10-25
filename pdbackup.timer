@@ -1,10 +1,10 @@
 [Unit]
-Description=Proton Drive sync every 10 minutes
+Description=Proton Drive backup every two weeks
 
 [Timer]
-OnCalendar=*:0/10:00
+OnCalendar=*-*-1,15 00:00:00
 Persistent=true
-Unit=pdsync.service
+Unit=pdbackup.service
 
 [Install]
-WantedBy=timers.target
+WantedBy=multi-user.target

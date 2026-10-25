@@ -1,8 +1,9 @@
 [Unit]
-Description=Proton Drive sync of folder ~/Dokument
-ConditionPathExists=%h/bin/pdsync
+Description=Proton Drive backup of folder /data/shared
+ConditionPathExists=/user/tbrokke/bin/pdsync
 
 [Service]
+User=tbrokke
 Type=oneshot
 PassEnvironment=DBUS_SESSION_BUS_ADDRESS
-ExecStart=%h/bin/pdsync "Dokument" "Dokument"
+ExecStart=/user/tbrokke/bin/pdbackup "/data/shared" "shared"
