@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# pdsync: a Bash script for syncing a local folder with a remote Proton Drive
-# folder.
+# pdbackup: a Bash script for backing up a local folder to a remote Proton
+# Drive folder.
 
 set -u
 
@@ -52,72 +52,29 @@ if ! command -v proton-drive > /dev/null; then
   die "proton-drive CLI not installed."
 fi
 
-if ! command -v rsync > /dev/null; then
-  die "rsync not installed."
-fi
-
 if ! (($# == 2)); then
   die "wrong number of arguments; use '$SCRIPT_NAME -h' for help."
 fi
 
 if ! ip route get 1.1.1.1 || ! ping -c 1 -W 10 1.1.1.1; then
-  notify-send "pdsync: unable to establish network connection."
+  echo "Unable to establish network connection." >> /home/tbrokke/pdbackup.log
   die "unable to establish network connection."
 fi
 
-readonly BUFFER_FOLDER="/data/.pdsync-buffer"
-local_folder="${1/#\~/$HOME}"
-buffer_subfolder="$BUFFER_FOLDER/$(basename "$local_folder")"
-remote_folder="/my-files/$2"
-
-if [[ ! -d "$BUFFER_FOLDER" ]]; then
-  die "buffer folder $BUFFER_FOLDER does not exist"
-fi
-
-if [[ ! -w "$BUFFER_FOLDER" ]]; then
-  die "unable to write to buffer folder $BUFFER_FOLDER."
-fi
-
-if [[ ! -d "$buffer_subfolder" ]]; then
-  mkdir "$buffer_subfolder" \
-    || die "unable to create buffer $BUFFER_FOLDER/$buffer_subfolder."
-fi
+local_folder="$1"
+remote_folder="/my-files/$2_$(date +"%Y-%m-%d")"
 
 if [[ ! -d "$local_folder" ]]; then
   die "local folder $local_folder does not exist."
 fi
 
-if ! proton-drive filesystem list "$remote_folder"; then
-  die "remote folder $remote_folder does not exist."
-fi
-
-# For download, newer remote files overwrite older local files. File deletions
-# are also synced.
-
-log "Downloading files from Proton Drive..."
-
-proton-drive filesystem download --file-conflict-strategy remove \
-  --folder-conflict-strategy merge "$remote_folder" "$buffer_subfolder" \
-  || die "unable to download files from remote folder $remote_folder."
-
-log "Download complete."
-
-rsync --recursive --update --delete "$buffer_subfolder/" "$local_folder/" \
-  || die "unable to sync between buffer and $local_folder."
-
-log "Synchronization of local files complete."
-
-rm -rf "$buffer_subfolder" || die "unable to delete buffer folder contents."
-
-# For upload, newer local files overwrite older remote files and create a new
-# remote version. File deletions are NOT synced.
-
 log "Uploading files to Proton Drive..."
 
-proton-drive filesystem upload --file-conflict-strategy create-new-revision \
-  --folder-conflict-strategy merge "$local_folder" "$remote_folder" \
+proton-drive filesystem upload --file-conflict-strategy replace\
+  --folder-conflict-strategy replace "$local_folder" "$remote_folder" \
   || die "unable to upload files to remote folder $remote_folder."
 
 log "Upload complete."
 
-notify-send "Proton Drive synchronization successfully completed."
+echo "Sync successfully completed at $(date +"%Y-%m-%d %H:%M:%S")" \
+  >> /home/tbrokke/pdbackup.log 
