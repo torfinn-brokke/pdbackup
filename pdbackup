@@ -29,12 +29,15 @@ usage() {
   echo "NOTE:"
   echo "  Paths with spaces in them must be quoted."
   echo "  Do not add the Proton Drive root folder (/my-files) to remote path."
+  echo "  To change the target folder for the log file, edit 'LOG_TARGET'."
   printf "\n"
   echo "Options:"
   echo "  -h  Display this help text."
 }
 
 # --- Main Logic ---
+
+readonly LOG_TARGET="/home/tbrokke"
 
 while getopts :h opt; do
   case "$opt" in
@@ -57,7 +60,7 @@ if ! (($# == 2)); then
 fi
 
 if ! ip route get 1.1.1.1 || ! ping -c 1 -W 10 1.1.1.1; then
-  log "Unable to establish network connection." >> /home/tbrokke/pdbackup.log
+  log "Unable to establish network connection." >> "$LOG_TARGET"/pdbackup.log
   die "unable to establish network connection."
 fi
 
@@ -77,4 +80,4 @@ proton-drive filesystem upload --file-conflict-strategy replace\
 log "Upload complete."
 
 log "Sync successfully completed at $(date +"%Y-%m-%d %H:%M:%S")." \
-  >> /home/tbrokke/pdbackup.log 
+  >> "$LOG_TARGET"/pdbackup.log 
