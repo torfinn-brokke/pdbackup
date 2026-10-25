@@ -1,0 +1,10 @@
+[Unit]
+Description=Proton Drive sync every 10 minutes
+
+[Timer]
+OnCalendar=*:0/10:00
+Persistent=true
+Unit=pdsync.service
+
+[Install]
+WantedBy=timers.target

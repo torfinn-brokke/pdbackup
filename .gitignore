@@ -1,0 +1,20 @@
+# Vim
+*.swp
+*.swo
+*~
+*.un~
+
+# Backup / Temporary Files
+*.bak
+*.tmp
+*.temp
+
+# Editor / OS Noise
+.DS_Store
+Thumbs.db
+*.log
+
+# Environment / Secrets
+.env
+*.env
+secrets/

@@ -1,0 +1,8 @@
+[Unit]
+Description=Proton Drive sync of folder ~/Dokument
+ConditionPathExists=%h/bin/pdsync
+
+[Service]
+Type=oneshot
+PassEnvironment=DBUS_SESSION_BUS_ADDRESS
+ExecStart=%h/bin/pdsync "Dokument" "Dokument"
