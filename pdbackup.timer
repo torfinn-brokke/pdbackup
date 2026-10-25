@@ -1,5 +1,5 @@
 [Unit]
-Description=Proton Drive backup every two weeks
+Description=Proton Drive backup twice every month
 
 [Timer]
 OnCalendar=*-*-1,15 00:00:00

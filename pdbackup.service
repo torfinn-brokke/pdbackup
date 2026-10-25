@@ -1,9 +1,8 @@
 [Unit]
 Description=Proton Drive backup of folder /data/shared
-ConditionPathExists=/user/tbrokke/bin/pdsync
+ConditionPathExists=/home/tbrokke/bin/pdbackup
 
 [Service]
 User=tbrokke
 Type=oneshot
-PassEnvironment=DBUS_SESSION_BUS_ADDRESS
-ExecStart=/user/tbrokke/bin/pdbackup "/data/shared" "shared"
+ExecStart=/home/tbrokke/bin/pdbackup "/data/shared" "shared"
