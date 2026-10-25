@@ -60,7 +60,7 @@ if ! (($# == 2)); then
 fi
 
 if ! ip route get 1.1.1.1 || ! ping -c 1 -W 10 1.1.1.1; then
-  log "Unable to establish network connection." >> "$LOG_TARGET"/pdbackup.log
+  log "Cannot establish network connection." >> "$LOG_TARGET"/pdbackup.log 2>&1
   die "unable to establish network connection."
 fi
 
@@ -80,4 +80,4 @@ proton-drive filesystem upload --file-conflict-strategy replace\
 log "Upload complete."
 
 log "Sync successfully completed at $(date +"%Y-%m-%d %H:%M:%S")." \
-  >> "$LOG_TARGET"/pdbackup.log 
+  >> "$LOG_TARGET"/pdbackup.log 2>&1 
