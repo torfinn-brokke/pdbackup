@@ -37,7 +37,7 @@ usage() {
 
 # --- Main Logic ---
 
-readonly LOG_TARGET="/home/tbrokke"
+readonly LOG_TARGET="$HOME"
 
 while getopts :h opt; do
   case "$opt" in
@@ -60,7 +60,7 @@ if ! (($# == 2)); then
 fi
 
 if ! ip route get 1.1.1.1 || ! ping -c 1 -W 10 1.1.1.1; then
-  log "Cannot establish network connection." >> "$LOG_TARGET"/pdbackup.log 2>&1
+  log "Could not reach external host." >> "$LOG_TARGET/pdbackup.log" 2>&1
   die "unable to establish network connection."
 fi
 
@@ -71,13 +71,11 @@ if [[ ! -d "$local_folder" ]]; then
   die "local folder $local_folder does not exist."
 fi
 
-log "Uploading files to Proton Drive..."
+log "Uploading files to Proton Drive..." >> "$LOG_TARGET/pdbackup.log" 2>&1
 
-proton-drive filesystem upload --file-conflict-strategy replace\
-  --folder-conflict-strategy replace "$local_folder" "$remote_folder" \
-  || die "unable to upload files to remote folder $remote_folder."
+proton-drive filesystem upload --file-conflict-strategy replace \
+  --folder-conflict-strategy replace "$local_folder" "$remote_folder" || \
+  { log "Upload failed." 2>&1; \
+    die "unable to upload files to remote folder $remote_folder."; }
 
-log "Upload complete."
-
-log "Sync successfully completed at $(date +"%Y-%m-%d %H:%M:%S")." \
-  >> "$LOG_TARGET"/pdbackup.log 2>&1 
+log "Upload successfully completed." >> "$LOG_TARGET/pdbackup.log" 2>&1
