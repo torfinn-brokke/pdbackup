@@ -1,8 +1,8 @@
 [Unit]
-Description=Proton Drive backup of folder /data/shared
-ConditionPathExists=/home/tbrokke/bin/pdbackup
+Description=Proton Drive backup of folder <local_folder>
+ConditionPathExists=/home/<username>/bin/pdbackup
 
 [Service]
 User=<username>
 Type=oneshot
-ExecStart=/home/tbrokke/bin/pdbackup "/data/shared" "shared"
+ExecStart=/home/<username>/bin/pdbackup "<local_folder>" "<remote_folder>"
