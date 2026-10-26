@@ -3,6 +3,6 @@ Description=Proton Drive backup of folder /data/shared
 ConditionPathExists=/home/tbrokke/bin/pdbackup
 
 [Service]
-User=tbrokke
+User=<username>
 Type=oneshot
 ExecStart=/home/tbrokke/bin/pdbackup "/data/shared" "shared"
