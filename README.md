@@ -70,7 +70,7 @@ $ pdbackup -h
 
 In this repo there are also two other  files, `pdbackup.service` and `pdbackup.timer`, that can be used for setting up `pdbackup` as a system service.
 
-> **NOTE:** This is for advanced users only. If you are not comfortable with setting up system timers, use `crontab` or similar instead.
+> **NOTE:** This is for advanced users only. If you are not comfortable with setting up systemd timers, use `crontab` or similar instead.
 
 To do this, first edit `pdbackup.service` and find the fields `User=`, `ConditionPathExists=` and `ExecStart`. Change `<username>`, `<local_folder>` and `<remote_folder>` to suit your requirements. The default interval of twice a month can also be changed by editing the field `OnCalendar=` in `pdbackup.timer`.
 
