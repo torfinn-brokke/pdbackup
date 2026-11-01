@@ -71,13 +71,15 @@ if [[ ! -d "$local_folder" ]]; then
   die "local folder $local_folder does not exist."
 fi
 
-log "Creating folder $remote_folder on Proton Drive..." 2>&1
+log "Creating folder $remote_folder on Proton Drive..." \
+  >> "$LOG_TARGET/pdbackup.log" 2>&1
 
 "$HOME"/bin/proton-drive filesystem create-folder /my-files \
   "$(basename "$remote_folder")" \
   || die "unable to create folder $remote_folder on Proton Drive." 
 
-log "Folder $remote_folder created on Proton Drive." 2>&1
+log "Folder $remote_folder created on Proton Drive." \
+  >> "$LOG_TARGET/pdbackup.log" 2>&1
 
 log "Uploading files to Proton Drive..." >> "$LOG_TARGET/pdbackup.log" 2>&1
 
