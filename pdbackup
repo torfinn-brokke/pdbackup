@@ -73,7 +73,7 @@ fi
 
 log "Uploading files to Proton Drive..." >> "$LOG_TARGET/pdbackup.log" 2>&1
 
-proton-drive filesystem upload --file-conflict-strategy replace \
+$HOME/bin/proton-drive filesystem upload --file-conflict-strategy replace \
   --folder-conflict-strategy replace "$local_folder" "$remote_folder" || \
   { log "Upload failed." >> "$LOG_TARGET/pdbackup.log" 2>&1; \
     die "unable to upload files to remote folder $remote_folder."; }
