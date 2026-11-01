@@ -3,6 +3,5 @@ Description=Proton Drive backup of folder <local_folder>
 ConditionPathExists=/home/<username>/bin/pdbackup
 
 [Service]
-User=<username>
 Type=oneshot
 ExecStart=/home/<username>/bin/pdbackup "<local_folder>" "<remote_folder>"

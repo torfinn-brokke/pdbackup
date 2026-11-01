@@ -68,17 +68,22 @@ For help, use:
 $ pdbackup -h
 ```
 
-In this repo there are also two other  files, `pdbackup.service` and `pdbackup.timer`, that can be used for setting up `pdbackup` as a system service.
+In this repo there are also two other  files, `pdbackup.service` and `pdbackup.timer`, that can be used for setting up `pdbackup` as a user timer.
 
 > **NOTE:** This is for advanced users only. If you are not comfortable with setting up systemd timers, use `crontab` or similar instead.
 
-To do this, first edit `pdbackup.service` and find the fields `User=`, `ConditionPathExists=` and `ExecStart`. Change `<username>`, `<local_folder>` and `<remote_folder>` to suit your requirements. The default interval of twice a month can also be changed by editing the field `OnCalendar=` in `pdbackup.timer`.
+To do this, first edit `pdbackup.service` and find the fields `ConditionPathExists=` and `ExecStart=`. Change `<local_folder>` and `<remote_folder>` to suit your requirements. The default interval of twice a month can also be changed by editing the field `OnCalendar=` in `pdbackup.timer`.
 
-Then copy both files to `/etc/systemd/system/` and run the following two commands:
+Then copy both files to `~/.config/systemd/user/` and run the following two commands:
 
 ```bash
-$ sudo systemctl daemon-reload
-$ sudo systemctl enable --now pdbackup.timer
+$ systemctl --user daemon-reload
+$ systemctl --user enable --now pdbackup.timer
+```
+If you want the timer to run even when you are not logged in, also enable lingering:
+
+```bash
+loginctl enable-linger "$USER"
 ```
 
 Then check that you get the statuses "loaded", "enabled" and "waiting" when you issue the command  `systemctl status pdbackup.timer`, and that you can see the next run time with `systemctl list-timers pdbackup.timer`.
