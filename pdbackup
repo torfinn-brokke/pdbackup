@@ -51,7 +51,7 @@ done
 
 shift $((OPTIND - 1))
 
-if ! command -v proton-drive > /dev/null; then
+if ! command -v "$HOME/bin/proton-drive" > /dev/null; then
   die "proton-drive CLI not installed."
 fi
 
